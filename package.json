@@ -1,0 +1,17 @@
+{
+  "name": "stripe-payment",
+  "version": "1.0.0",
+  "description": "Stripe payment integration with Express",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "stripe": "^8.187.0",
+    "body-parser": "^1.19.0"
+  },
+  "engines": {
+    "node": "12.x"
+  }
+}
