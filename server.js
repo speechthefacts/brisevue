@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 // Route pour servir votre page HTML
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'brise vue.html'));
+    res.sendFile(path.join(__dirname, 'brise_vue.html'));
 });
 
 // Route pour le traitement des paiements avec Stripe
@@ -23,7 +23,7 @@ app.post('/create-checkout-session', async (req, res) => {
                     price_data: {
                         currency: 'eur',
                         product_data: {
-                            name: 'Bacs à fleurs ronds', // Modifier le nom du produit pour les bacs ronds
+                            name: 'Brise-vues', // Nom du produit pour les brise-vues
                         },
                         unit_amount: req.body.montant,
                     },
@@ -34,8 +34,9 @@ app.post('/create-checkout-session', async (req, res) => {
             success_url: 'https://a-scoria.fr/success-payement', // URL de redirection après un paiement réussi
             cancel_url: 'https://a-scoria.fr/cancel-payement', // URL de redirection après l'annulation du paiement
             metadata: { // Ajoutez les métadonnées ici
-                diametre: req.body.diametre, // Récupération du diamètre depuis le corps de la requête
+                longueur: req.body.longueur, // Récupération de la longueur depuis le corps de la requête
                 hauteur: req.body.hauteur, // Récupération de la hauteur depuis le corps de la requête
+                motif: req.body.motif // Récupération du motif depuis le corps de la requête
             },
             shipping_address_collection: {
                 allowed_countries: ['FR'], // Définissez les pays autorisés pour l'adresse de livraison
