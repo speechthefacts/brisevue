@@ -62,21 +62,15 @@
     </style>
 </head>
 <body>
-    <h1>Bacs à fleurs ronds</h1>
-    <label for="diametre">Diamètre (mm) :</label>
-    <input type="number" id="diametre" min="300" max="1200" value="500">
+    <h1>Brise-vues</h1>
+    <label for="longueur">Longueur (mm) :</label>
+    <input type="number" id="longueur" min="100" max="1800" value="1000">
     <label for="hauteur">Hauteur (mm) :</label>
-    <input type="number" id="hauteur" min="200" max="1200" value="200">
+    <input type="number" id="hauteur" min="300" max="1000" value="500">
     <label for="quantity">Quantité :</label>
     <select id="quantity"></select>
-    <label>
-        <input type="checkbox" id="avecPieds" onclick="checkboxClicked(this)">
-        Avec pieds 10 cm : + 10 euros TTC
-    </label>
-    <label>
-        <input type="checkbox" id="avecRoulettes" onclick="checkboxClicked(this)">
-        Avec roulettes : + 90 euros TTC
-    </label>
+    <label for="motif">Motif (1-36) :</label>
+    <input type="number" id="motif" min="1" max="36" value="1">
     <button onclick="calculerMontant()">Calculer Montant</button>
     <div id="result"></div>
     <button id="checkout-button" style="display: none;">Payer maintenant</button>
@@ -99,46 +93,35 @@
         generateQuantityOptions();
 
         function calculerMontant() {
-            var diametre = parseFloat(document.getElementById('diametre').value) / 1000;
-            var hauteur = parseFloat(document.getElementById('hauteur').value) / 1000;
+            var longueur = parseFloat(document.getElementById('longueur').value) / 1000; // Conversion en mètres
+            var hauteur = parseFloat(document.getElementById('hauteur').value) / 1000; // Conversion en mètres
             
-            if (diametre < 0.3 || diametre > 1.2 || hauteur < 0.2 || hauteur > 1.2) {
-                alert("Les dimensions doivent être comprises entre 300mm et 1200mm pour le diamètre, et entre 200mm et 1200mm pour la hauteur.");
+            // Vérifier si les dimensions sont dans les limites spécifiées
+            if (longueur < 0.1 || longueur > 1.8 || hauteur < 0.3 || hauteur > 1) {
+                alert("Les dimensions doivent être comprises entre 100mm et 1800mm pour la longueur, et entre 300mm et 1000mm pour la hauteur.");
                 return;
             }
             
-            var quantity = parseInt(document.getElementById('quantity').value);
-            var prix = calculerPrix(diametre, hauteur, quantity);
+            // Calcul de la surface du brise-vue
+            var surface = longueur * hauteur;
             
+            // Poids en kg
+            var poids = surface * 16;
+            
+            // Prix de base en euros
+            var prix = poids * 13.8;
+            
+            // Multiplication du prix par la quantité sélectionnée
+            var quantity = parseInt(document.getElementById('quantity').value);
+            prix *= quantity;
+            
+            // Afficher le montant calculé
             document.getElementById('result').innerHTML = "<strong>Montant à payer :</strong> " + prix.toFixed(2) + " euros";
 
             if (prix > 0) {
                 document.getElementById('checkout-button').style.display = 'block';
             } else {
                 document.getElementById('checkout-button').style.display = 'none';
-            }
-        }
-
-        function calculerPrix(diametre, hauteur, quantity) {
-            var surface = Math.PI * Math.pow((diametre / 2), 2) + (Math.PI * diametre * hauteur);
-            var poids = surface * 16;
-            var prix = poids * 13.8;
-            
-            if (document.getElementById('avecPieds').checked) {
-                prix += 10 * quantity;
-            }
-            if (document.getElementById('avecRoulettes').checked) {
-                prix += 90 * quantity;
-            }
-
-            return prix * quantity;
-        }
-
-        function checkboxClicked(clickedCheckbox) {
-            if (clickedCheckbox.id === 'avecPieds' && clickedCheckbox.checked) {
-                document.getElementById('avecRoulettes').checked = false;
-            } else if (clickedCheckbox.id === 'avecRoulettes' && clickedCheckbox.checked) {
-                document.getElementById('avecPieds').checked = false;
             }
         }
 
@@ -152,11 +135,10 @@
                 },
                 body: JSON.stringify({
                     montant: montant,
-                    diametre: parseFloat(document.getElementById('diametre').value),
+                    longueur: parseFloat(document.getElementById('longueur').value),
                     hauteur: parseFloat(document.getElementById('hauteur').value),
                     quantity: parseInt(document.getElementById('quantity').value),
-                    avecPieds: document.getElementById('avecPieds').checked,
-                    avecRoulettes: document.getElementById('avecRoulettes').checked
+                    motif: parseInt(document.getElementById('motif').value)
                 })
             })
             .then(function(response) {
@@ -177,3 +159,4 @@
     </script>
 </body>
 </html>
+
