@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 // Route pour servir votre page HTML
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'brise_vue.html'));
+    res.sendFile(path.join(__dirname, 'brise vue.html'));
 });
 
 // Route pour le traitement des paiements avec Stripe
