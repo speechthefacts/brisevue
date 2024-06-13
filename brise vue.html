@@ -63,14 +63,22 @@
 </head>
 <body>
     <h1>Brise-vues</h1>
-    <label for="longueur">Longueur (mm) :</label>
-    <input type="number" id="longueur" min="100" max="1800" value="1000">
-    <label for="hauteur">Hauteur (mm) :</label>
-    <input type="number" id="hauteur" min="300" max="1000" value="500">
+    <label for="longueur">Longueur (cm) :</label>
+    <input type="number" id="longueur" min="10" max="180" value="100">
+    <label for="hauteur">Hauteur (cm) :</label>
+    <input type="number" id="hauteur" min="30" max="100" value="50">
     <label for="quantity">Quantité :</label>
     <select id="quantity"></select>
     <label for="motif">Motif (1-36) :</label>
     <input type="number" id="motif" min="1" max="36" value="1">
+    <label>
+        <input type="checkbox" id="livraison" onclick="checkboxLivraison(this)">
+        Livraison à domicile : + 100 euros TTC
+    </label>
+    <label>
+        <input type="checkbox" id="retrait" onclick="checkboxLivraison(this)">
+        Retrait à l'atelier
+    </label>
     <button onclick="calculerMontant()">Calculer Montant</button>
     <div id="result"></div>
     <button id="checkout-button" style="display: none;">Payer maintenant</button>
@@ -93,12 +101,12 @@
         generateQuantityOptions();
 
         function calculerMontant() {
-            var longueur = parseFloat(document.getElementById('longueur').value) / 1000; // Conversion en mètres
-            var hauteur = parseFloat(document.getElementById('hauteur').value) / 1000; // Conversion en mètres
+            var longueur = parseFloat(document.getElementById('longueur').value) / 100; // Conversion en mètres
+            var hauteur = parseFloat(document.getElementById('hauteur').value) / 100; // Conversion en mètres
             
             // Vérifier si les dimensions sont dans les limites spécifiées
             if (longueur < 0.1 || longueur > 1.8 || hauteur < 0.3 || hauteur > 1) {
-                alert("Les dimensions doivent être comprises entre 100mm et 1800mm pour la longueur, et entre 300mm et 1000mm pour la hauteur.");
+                alert("Les dimensions doivent être comprises entre 10cm et 180cm pour la longueur, et entre 30cm et 100cm pour la hauteur.");
                 return;
             }
             
@@ -115,6 +123,11 @@
             var quantity = parseInt(document.getElementById('quantity').value);
             prix *= quantity;
             
+            // Ajouter les frais de livraison
+            if (document.getElementById('livraison').checked) {
+                prix += 100;
+            }
+            
             // Afficher le montant calculé
             document.getElementById('result').innerHTML = "<strong>Montant à payer :</strong> " + prix.toFixed(2) + " euros";
 
@@ -122,6 +135,14 @@
                 document.getElementById('checkout-button').style.display = 'block';
             } else {
                 document.getElementById('checkout-button').style.display = 'none';
+            }
+        }
+
+        function checkboxLivraison(clickedCheckbox) {
+            if (clickedCheckbox.id === 'livraison' && clickedCheckbox.checked) {
+                document.getElementById('retrait').checked = false;
+            } else if (clickedCheckbox.id === 'retrait' && clickedCheckbox.checked) {
+                document.getElementById('livraison').checked = false;
             }
         }
 
@@ -134,11 +155,14 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    type: "brise_vue",
                     montant: montant,
                     longueur: parseFloat(document.getElementById('longueur').value),
                     hauteur: parseFloat(document.getElementById('hauteur').value),
                     quantity: parseInt(document.getElementById('quantity').value),
-                    motif: parseInt(document.getElementById('motif').value)
+                    motif: parseInt(document.getElementById('motif').value),
+                    livraison: document.getElementById('livraison').checked,
+                    retrait: document.getElementById('retrait').checked
                 })
             })
             .then(function(response) {
@@ -159,4 +183,3 @@
     </script>
 </body>
 </html>
-
