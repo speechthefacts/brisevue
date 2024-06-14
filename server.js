@@ -37,6 +37,8 @@ app.post('/create-checkout-session', async (req, res) => {
                 longueur: req.body.longueur, // Récupération de la longueur depuis le corps de la requête
                 hauteur: req.body.hauteur, // Récupération de la hauteur depuis le corps de la requête
                 motif: req.body.motif // Récupération du motif depuis le corps de la requête
+                livraisonDomicile : req.body.livraisonDomicile
+                retraitAtelier : req.body.retraitAtelier
             },
             shipping_address_collection: {
                 allowed_countries: ['FR'], // Définissez les pays autorisés pour l'adresse de livraison
