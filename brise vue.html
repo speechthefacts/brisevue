@@ -72,11 +72,11 @@
     <label for="motif">Motif (1-36) :</label>
     <input type="number" id="motif" min="1" max="36" value="1">
     <label>
-        <input type="checkbox" id="livraison" onclick="checkboxLivraison(this)">
+        <input type="checkbox" id="livraisonDomicile" onclick="checkboxLivraison(this)">
         Livraison à domicile : + 100 euros TTC
     </label>
     <label>
-        <input type="checkbox" id="retrait" onclick="checkboxLivraison(this)">
+        <input type="checkbox" id="retraitAtelier" onclick="checkboxLivraison(this)">
         Retrait à l'atelier
     </label>
     <button onclick="calculerMontant()">Calculer Montant</button>
@@ -139,10 +139,10 @@
         }
 
         function checkboxLivraison(clickedCheckbox) {
-            if (clickedCheckbox.id === 'livraison' && clickedCheckbox.checked) {
-                document.getElementById('retrait').checked = false;
-            } else if (clickedCheckbox.id === 'retrait' && clickedCheckbox.checked) {
-                document.getElementById('livraison').checked = false;
+            if (clickedCheckbox.id === 'livraisonDomicile' && clickedCheckbox.checked) {
+                document.getElementById('retraitAtelier').checked = false;
+            } else if (clickedCheckbox.id === 'retraitAtelier' && clickedCheckbox.checked) {
+                document.getElementById('livraisonDomicile').checked = false;
             }
         }
 
